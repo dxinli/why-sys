@@ -2,8 +2,79 @@ syntax = "proto3";
 
 package auth.v1;
 
+import "google/api/annotations.proto";
+
 option go_package = "why-sys/api/auth/v1;v1";
 
 service Role{
+  rpc CreateRole(CreateRoleRequest) returns (CreateRoleResponse) {
+    option (google.api.http) = {
+      post: "/v1/role"
+      body: "*"
+    };
+  }
 
+  rpc UpdateRole(UpdateRoleRequest) returns (UpdateRoleResponse) {
+    option (google.api.http) = {
+      put: "/v1/role"
+      body: "*"
+    };
+  }
+
+  rpc GetRoles(GetRoleRequest) returns (GetRoleResponse) {
+    option (google.api.http) = {
+      post: "/v1/role"
+      body: "*"
+    };
+  }
+
+  rpc DeleteRole(DeleteRoleRequest) returns (DeleteRoleResponse) {
+    option (google.api.http) = {
+      delete: "/v1/role"
+      body: "*"
+    };
+  }
+}
+
+message CreateRoleRequest {
+  string name = 1;
+  string description = 2;
+}
+
+message CreateRoleResponse {
+  string msg = 1;
+}
+
+message UpdateRoleRequest {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message UpdateRoleResponse {
+  string msg = 1;
+}
+
+message GetRoleRequest {
+  uint64 id = 1;
+  string name = 2;
+}
+
+message GetRoleResponse {
+  repeated RoleInfo roles = 1;
+}
+
+message RoleInfo {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message DeleteRoleRequest {
+  int64 id = 1;
+  string name = 2;
+}
+
+message DeleteRoleResponse {
+  string msg = 1;
 }
