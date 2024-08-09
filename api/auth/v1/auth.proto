@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package auth.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "why-sys/api/auth/v1;v1";
+
+service Auth {
+  rpc Register(RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = {
+      post: "/v1/register"
+      body: "*"
+    };
+  }
+
+  rpc Login(LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/v1/login"
+      body: "*"
+    };
+  }
+
+  rpc Check(CheckRequest) returns (CheckResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/check"
+      body: "*"
+    };
+  }
+}
+
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+  string email = 3;
+  optional uint32 age = 4;
+  optional google.protobuf.Timestamp brith = 5;
+}
+
+message RegisterResponse {
+  string msg = 1;
+}
+
+message CheckRequest {
+  string method = 1;
+  string uri = 2;
+}
+
+message CheckResponse {
+  bool ok = 1;
+  string msg = 2;
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string token = 1;
+}
