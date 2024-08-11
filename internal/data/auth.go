@@ -21,7 +21,7 @@ func (a *authRepo) Check(ctx context.Context, user *biz.SecurityUser) bool {
 }
 
 func (a *authRepo) Create(ctx context.Context, u *biz.User) (int, error) {
-	user, err := a.data.db.User.Create().
+	createUser, err := a.data.db.User.Create().
 		SetUserName(u.Username).
 		SetPassword(u.Password).
 		SetEmail(u.Email).
@@ -31,7 +31,7 @@ func (a *authRepo) Create(ctx context.Context, u *biz.User) (int, error) {
 		return 0, err
 	}
 
-	return user.ID, nil
+	return createUser.ID, nil
 }
 
 func (a *authRepo) Login(context context.Context, loginUser *biz.User) (int, error) {

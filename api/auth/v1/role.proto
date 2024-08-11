@@ -2,8 +2,102 @@ syntax = "proto3";
 
 package auth.v1;
 
+import "google/api/annotations.proto";
+
 option go_package = "why-sys/api/auth/v1;v1";
 
 service Role{
+  rpc CreateRole(CreateRoleRequest) returns (CreateRoleResponse) {
+    option (google.api.http) = {
+      post: "/v1/role"
+      body: "*"
+    };
+  }
 
+  rpc UpdateRole(UpdateRoleRequest) returns (UpdateRoleResponse) {
+    option (google.api.http) = {
+      put: "/v1/role/{id}"
+      body: "*"
+    };
+  }
+
+  rpc DeleteRole(DeleteRoleRequest) returns (DeleteRoleResponse) {
+    option (google.api.http) = {
+      delete: "/v1/role/{id}"
+    };
+  }
+
+  rpc GetRole(GetRoleRequest) returns (GetRoleResponse) {
+    option (google.api.http) = {
+      get: "/v1/role/{id}"
+    };
+  }
+
+  rpc ListRole(ListRoleRequest) returns (ListRoleResponse) {
+    option (google.api.http) = {
+      get: "/v1/role"
+    };
+  }
+
+  rpc GrantUserRole(GrantUserRoleRequest) returns (GrantUserRoleResponse) {
+    option (google.api.http) = {
+      put: "/v1/user/{userId}/role/{roleId}"
+      body:"_empty"
+    };
+  }
+}
+
+message CreateRoleRequest {
+  string name = 1;
+  string description = 2;
+}
+
+message CreateRoleResponse {
+  string msg = 1;
+}
+
+message UpdateRoleRequest {
+  uint64 id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message UpdateRoleResponse {
+  string msg = 1;
+}
+
+message DeleteRoleRequest {
+  uint64 id = 1;
+}
+
+message DeleteRoleResponse {
+  string msg = 1;
+}
+
+message GetRoleRequest {
+  uint64 id = 1;
+}
+
+message GetRoleResponse {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message ListRoleRequest {
+  string name = 1;
+}
+
+message ListRoleResponse {
+  repeated GetRoleResponse data = 1;
+}
+
+message GrantUserRoleRequest {
+  uint64 userId = 1;
+  uint64 roleId = 2;
+  string _empty = 3;
+}
+
+message GrantUserRoleResponse {
+  string msg = 1;
 }

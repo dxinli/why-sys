@@ -22,7 +22,7 @@ import (
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewAuthRepo)
+var ProviderSet = wire.NewSet(NewData, NewAuthRepo, NewRoleRepo)
 
 var rbacModel = `
 		[request_definition]
@@ -92,7 +92,8 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 	syncedCachedEnforcer.SetExpireTime(60 * 60)
 
 	return &Data{
-			db: client,
+			db:            client,
+			casbinAdapter: syncedCachedEnforcer,
 		}, func() {
 			log.Info("message", "closing the data resources")
 			if err := client.Close(); err != nil {

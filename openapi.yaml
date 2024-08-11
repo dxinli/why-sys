@@ -61,6 +61,42 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/auth.v1.LoginResponse'
+    /v1/menu:
+        post:
+            tags:
+                - Menu
+            operationId: Menu_CreateMenu
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/auth.v1.MenuDetail'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/auth.v1.CreateMenuResponse'
+    /v1/menus:
+        post:
+            tags:
+                - Menu
+            operationId: Menu_ListMenu
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/auth.v1.ListMenuRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/auth.v1.MenuDetail'
     /v1/register:
         post:
             tags:
@@ -79,6 +115,127 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/auth.v1.RegisterResponse'
+    /v1/role:
+        get:
+            tags:
+                - Role
+            operationId: Role_ListRole
+            parameters:
+                - name: name
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/auth.v1.ListRoleResponse'
+        post:
+            tags:
+                - Role
+            operationId: Role_CreateRole
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/auth.v1.CreateRoleRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/auth.v1.CreateRoleResponse'
+    /v1/role/{id}:
+        get:
+            tags:
+                - Role
+            operationId: Role_GetRole
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/auth.v1.GetRoleResponse'
+        put:
+            tags:
+                - Role
+            operationId: Role_UpdateRole
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/auth.v1.UpdateRoleRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/auth.v1.UpdateRoleResponse'
+        delete:
+            tags:
+                - Role
+            operationId: Role_DeleteRole
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/auth.v1.DeleteRoleResponse'
+    /v1/user/{userId}/role/{roleId}:
+        put:
+            tags:
+                - Role
+            operationId: Role_GrantUserRole
+            parameters:
+                - name: userId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: roleId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: string
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/auth.v1.GrantUserRoleResponse'
 components:
     schemas:
         auth.v1.CheckRequest:
@@ -95,6 +252,62 @@ components:
                     type: boolean
                 msg:
                     type: string
+        auth.v1.CreateMenuResponse:
+            type: object
+            properties:
+                msg:
+                    type: string
+        auth.v1.CreateRoleRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                description:
+                    type: string
+        auth.v1.CreateRoleResponse:
+            type: object
+            properties:
+                msg:
+                    type: string
+        auth.v1.DeleteRoleResponse:
+            type: object
+            properties:
+                msg:
+                    type: string
+        auth.v1.GetRoleResponse:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                description:
+                    type: string
+        auth.v1.GrantUserRoleResponse:
+            type: object
+            properties:
+                msg:
+                    type: string
+        auth.v1.ListMenuRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                parentId:
+                    type: string
+                sort:
+                    type: number
+                    format: double
+                level:
+                    type: integer
+                    format: uint32
+        auth.v1.ListRoleResponse:
+            type: object
+            properties:
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/auth.v1.GetRoleResponse'
         auth.v1.LoginRequest:
             type: object
             properties:
@@ -107,6 +320,29 @@ components:
             properties:
                 token:
                     type: string
+        auth.v1.MenuDetail:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                parentId:
+                    type: string
+                sort:
+                    type: number
+                    format: double
+                level:
+                    type: integer
+                    format: uint32
+                path:
+                    type: string
+                component:
+                    type: string
+                description:
+                    type: string
+                leaf:
+                    type: boolean
         auth.v1.RegisterRequest:
             type: object
             properties:
@@ -127,6 +363,20 @@ components:
             properties:
                 msg:
                     type: string
+        auth.v1.UpdateRoleRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                description:
+                    type: string
+        auth.v1.UpdateRoleResponse:
+            type: object
+            properties:
+                msg:
+                    type: string
         helloworld.v1.HelloReply:
             type: object
             properties:
@@ -137,3 +387,5 @@ tags:
     - name: Auth
     - name: Greeter
       description: The greeting service definition.
+    - name: Menu
+    - name: Role
