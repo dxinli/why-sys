@@ -22,7 +22,7 @@ import (
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewAuthRepo, NewRoleRepo)
+var ProviderSet = wire.NewSet(NewData, NewAuthRepo, NewRoleRepo, NewMenuRepo, NewPermissionRepo)
 
 var rbacModel = `
 		[request_definition]

@@ -29,5 +29,7 @@ func NewGRPCServer(c *conf.Server, auth *service.AuthService, logger log.Logger)
 	srv := grpc.NewServer(opts...)
 	v1.RegisterAuthServer(srv, auth)
 	v1.RegisterRoleServer(srv, auth)
+	v1.RegisterMenuServer(srv, auth)
+	v1.RegisterPermissionServer(srv, auth)
 	return srv
 }

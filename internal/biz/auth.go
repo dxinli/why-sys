@@ -12,6 +12,7 @@ type User struct {
 	Username string
 	Password string
 	Email    string
+	ID       int
 
 	jwt.RegisteredClaims // v5版本新加的方法
 }
@@ -33,9 +34,9 @@ type AuthUsecase struct {
 	AuthRepo
 }
 
-func createAccessJwtToken(username string, secretKey []byte) (string, error) {
+func createAccessJwtToken(userID int, secretKey []byte) (string, error) {
 	claims := User{
-		Username: username,
+		ID: userID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)), // 过期时间1小时
 			IssuedAt:  jwt.NewNumericDate(time.Now()),                    // 签发时间
@@ -53,6 +54,9 @@ func parseJwt(tokenString, secretKey string) (*User, error) {
 	t, err := jwt.ParseWithClaims(tokenString, &User{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(secretKey), nil
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	if claims, ok := t.Claims.(*User); ok && t.Valid {
 		return claims, nil
@@ -66,11 +70,11 @@ func NewAuthUsecase(repo AuthRepo, logger log.Logger) *AuthUsecase {
 }
 
 func (uc *AuthUsecase) Login(ctx context.Context, user *User) (string, error) {
-	_, err := uc.AuthRepo.Login(ctx, user)
+	userID, err := uc.AuthRepo.Login(ctx, user)
 	if err != nil {
 		return "", err
 	}
-	token, err := createAccessJwtToken(user.Username, []byte("test_jwt"))
+	token, err := createAccessJwtToken(userID, []byte("test_jwt"))
 	if err != nil {
 		return "", err
 	}
@@ -92,5 +96,5 @@ func (uc *AuthUsecase) Check(ctx context.Context, token, uri, method string) boo
 	if err != nil {
 		return false
 	}
-	return uc.AuthRepo.Check(ctx, &SecurityUser{Path: uri, Method: method, AuthorityId: user.Username})
+	return uc.AuthRepo.Check(ctx, &SecurityUser{Path: uri, Method: method, AuthorityId: strconv.Itoa(user.ID)})
 }

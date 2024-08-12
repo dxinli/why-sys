@@ -2,28 +2,28 @@ package service
 
 import (
 	"context"
-	"strconv"
 	pb "why-sys/api/auth/v1"
 	"why-sys/internal/biz"
 )
 
 func (s *AuthService) CreateMenu(ctx context.Context, detail *pb.MenuDetail) (*pb.CreateMenuResponse, error) {
-	id, err := s.mc.CreateMenu(ctx, &biz.Menu{
+	menu := &biz.Menu{
 		Name:      detail.Name,
 		Path:      detail.Path,
 		Sort:      detail.Sort,
 		ParentID:  int(detail.ParentId),
 		Component: detail.Component,
-		Level:     int16(detail.Level),
+		Level:     uint16(detail.Level),
 		Desc:      detail.Description,
 		Leaf:      detail.Leaf,
-	})
+	}
+	id, err := s.mc.CreateMenu(ctx, menu)
 	if err != nil {
 		return nil, err
 	}
 
 	return &pb.CreateMenuResponse{
-		Msg: "创建成功，菜单id:" + strconv.Itoa(id),
+		Msg: "创建成功，菜单id:" + id,
 	}, nil
 }
 

@@ -3,6 +3,7 @@ package biz
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
+	"strconv"
 )
 
 type Menu struct {
@@ -14,7 +15,7 @@ type Menu struct {
 	Path       string
 	Component  string
 	Sort       float64
-	Level      int16
+	Level      uint16
 	Leaf       bool
 }
 
@@ -31,6 +32,10 @@ func NewMenuUsecase(repo MenuRepo, logger log.Logger) *MenuUsecase {
 	return &MenuUsecase{repo: repo, log: log.NewHelper(logger)}
 }
 
-func (mc MenuUsecase) CreateMenu(ctx context.Context, menu *Menu) (int, error) {
-	return mc.repo.CreateMenu(ctx, menu)
+func (mc MenuUsecase) CreateMenu(ctx context.Context, menu *Menu) (string, error) {
+	id, err := mc.repo.CreateMenu(ctx, menu)
+	if err != nil {
+		return "", err
+	}
+	return strconv.Itoa(id), nil
 }

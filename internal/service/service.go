@@ -13,12 +13,14 @@ type AuthService struct {
 	pb.UnimplementedAuthServer
 	pb.UnimplementedRoleServer
 	pb.UnimplementedMenuServer
+	pb.UnimplementedPermissionServer
 
 	uc *biz.AuthUsecase
 	rc *biz.RoleUsecase
 	mc *biz.MenuUsecase
+	pc *biz.PermissionUsecase
 }
 
-func NewAuthService(uc *biz.AuthUsecase, rc *biz.RoleUsecase) *AuthService {
-	return &AuthService{uc: uc, rc: rc}
+func NewAuthService(uc *biz.AuthUsecase, rc *biz.RoleUsecase, mc *biz.MenuUsecase, pc *biz.PermissionUsecase) *AuthService {
+	return &AuthService{uc: uc, rc: rc, mc: mc, pc: pc}
 }

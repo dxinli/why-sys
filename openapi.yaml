@@ -43,6 +43,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/auth.v1.CheckResponse'
+    /v1/auth/permission/grant-role-permission:
+        post:
+            tags:
+                - Permission
+            operationId: Permission_GrantRolePermission
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/auth.v1.GrantRolePermissionRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/auth.v1.GrantRolePermissionResponse'
     /v1/login:
         post:
             tags:
@@ -283,6 +301,20 @@ components:
                     type: string
                 description:
                     type: string
+        auth.v1.GrantRolePermissionRequest:
+            type: object
+            properties:
+                roleId:
+                    type: string
+                permissionIds:
+                    type: array
+                    items:
+                        type: string
+        auth.v1.GrantRolePermissionResponse:
+            type: object
+            properties:
+                msg:
+                    type: string
         auth.v1.GrantUserRoleResponse:
             type: object
             properties:
@@ -388,4 +420,5 @@ tags:
     - name: Greeter
       description: The greeting service definition.
     - name: Menu
+    - name: Permission
     - name: Role
