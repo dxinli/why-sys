@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"os"
-
+	"path/filepath"
 	"why-sys/internal/conf"
 
 	"github.com/go-kratos/kratos/contrib/registry/consul/v2"
@@ -31,7 +31,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&flagconf, "conf", "../../configs", "config path, eg: -conf config.yaml")
+	flag.StringVar(&flagconf, "conf", "configs", "config path, eg: -conf config.yaml")
 }
 
 func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, r *consul.Registry) *kratos.App {
@@ -60,9 +60,13 @@ func main() {
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
+	abs, err := filepath.Abs(flagconf)
+	if err != nil {
+		panic(err)
+	}
 	c := config.New(
 		config.WithSource(
-			file.NewSource(flagconf),
+			file.NewSource(abs),
 		),
 	)
 	defer c.Close()

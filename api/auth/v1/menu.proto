@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package auth.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "why-sys/api/auth/v1;v1";
+
+service Menu {
+  rpc CreateMenu(MenuDetail) returns (CreateMenuResponse) {
+    option (google.api.http) = {
+      post: "/v1/menu"
+      body: "*"
+    };
+  }
+
+  rpc ListMenu(ListMenuRequest) returns (MenuDetail) {
+    option (google.api.http) = {
+      post: "/v1/menus"
+      body: "*"
+    };
+  }
+}
+
+message CreateMenuResponse {
+  string msg = 1;
+}
+
+message ListMenuRequest {
+  string name = 1;
+  int64 parent_id = 2;
+  double sort = 3;
+  uint32 level = 4;
+}
+
+message MenuDetail {
+  uint64 id = 1;
+  string name = 2;
+  int64 parent_id = 3;
+  double sort = 4;
+  uint32 level = 5;
+  string path = 6;
+  string component = 7;
+  string description = 8;
+  bool leaf = 9;
+}

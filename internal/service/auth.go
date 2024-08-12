@@ -10,16 +10,6 @@ import (
 	pb "why-sys/api/auth/v1"
 )
 
-type AuthService struct {
-	pb.UnimplementedAuthServer
-
-	uc *biz.AuthUsecase
-}
-
-func NewAuthService(uc *biz.AuthUsecase) *AuthService {
-	return &AuthService{uc: uc}
-}
-
 func (s *AuthService) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
 	token, err := s.uc.Login(ctx, &biz.User{
 		Username: req.Username,

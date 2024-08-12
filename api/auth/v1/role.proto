@@ -16,22 +16,33 @@ service Role{
 
   rpc UpdateRole(UpdateRoleRequest) returns (UpdateRoleResponse) {
     option (google.api.http) = {
-      put: "/v1/role"
-      body: "*"
-    };
-  }
-
-  rpc GetRoles(GetRoleRequest) returns (GetRoleResponse) {
-    option (google.api.http) = {
-      post: "/v1/role"
+      put: "/v1/role/{id}"
       body: "*"
     };
   }
 
   rpc DeleteRole(DeleteRoleRequest) returns (DeleteRoleResponse) {
     option (google.api.http) = {
-      delete: "/v1/role"
-      body: "*"
+      delete: "/v1/role/{id}"
+    };
+  }
+
+  rpc GetRole(GetRoleRequest) returns (GetRoleResponse) {
+    option (google.api.http) = {
+      get: "/v1/role/{id}"
+    };
+  }
+
+  rpc ListRole(ListRoleRequest) returns (ListRoleResponse) {
+    option (google.api.http) = {
+      get: "/v1/role"
+    };
+  }
+
+  rpc GrantUserRole(GrantUserRoleRequest) returns (GrantUserRoleResponse) {
+    option (google.api.http) = {
+      put: "/v1/user/{userId}/role/{roleId}"
+      body:"_empty"
     };
   }
 }
@@ -46,7 +57,7 @@ message CreateRoleResponse {
 }
 
 message UpdateRoleRequest {
-  int64 id = 1;
+  uint64 id = 1;
   string name = 2;
   string description = 3;
 }
@@ -55,26 +66,38 @@ message UpdateRoleResponse {
   string msg = 1;
 }
 
+message DeleteRoleRequest {
+  uint64 id = 1;
+}
+
+message DeleteRoleResponse {
+  string msg = 1;
+}
+
 message GetRoleRequest {
   uint64 id = 1;
-  string name = 2;
 }
 
 message GetRoleResponse {
-  repeated RoleInfo roles = 1;
-}
-
-message RoleInfo {
-  int64 id = 1;
+  string id = 1;
   string name = 2;
   string description = 3;
 }
 
-message DeleteRoleRequest {
-  int64 id = 1;
-  string name = 2;
+message ListRoleRequest {
+  string name = 1;
 }
 
-message DeleteRoleResponse {
+message ListRoleResponse {
+  repeated GetRoleResponse data = 1;
+}
+
+message GrantUserRoleRequest {
+  uint64 userId = 1;
+  uint64 roleId = 2;
+  string _empty = 3;
+}
+
+message GrantUserRoleResponse {
   string msg = 1;
 }
