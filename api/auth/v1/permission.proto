@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package auth.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "why-sys/api/auth/v1;v1";
+
+service Permission{
+  rpc GrantRolePermission(GrantRolePermissionRequest) returns (GrantRolePermissionResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/permission/grant-role-permission"
+      body: "*"
+    };
+  }
+}
+
+message GrantRolePermissionRequest {
+  uint64 roleId = 1;
+  repeated uint64 permissionIds = 2;
+}
+
+message GrantRolePermissionResponse {
+  string msg = 1;
+}
