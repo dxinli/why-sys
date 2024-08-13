@@ -23,6 +23,7 @@ func (s *AuthService) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Logi
 	}, nil
 }
 func (s *AuthService) Check(ctx context.Context, req *pb.CheckRequest) (*pb.CheckResponse, error) {
+	// TODO 通过 ctx 中能够获取到 jwtChaim 不需要重新获取 token
 	tr, ok := transport.FromServerContext(ctx)
 	if !ok {
 		return nil, errors.New(500, "ERROR_GET_FROM_SERVER_CONTEXT", "请求元数据获取失败")

@@ -4,9 +4,11 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
 	"github.com/go-kratos/kratos/v2/middleware/selector"
+	"github.com/go-kratos/kratos/v2/middleware/validate"
 	jwtV5 "github.com/golang-jwt/jwt/v5"
 	v1 "why-sys/api/auth/v1"
 	"why-sys/internal/conf"
+	"why-sys/internal/pkg/encoder"
 	"why-sys/internal/service"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -17,8 +19,11 @@ import (
 // NewHTTPServer new an HTTP server.
 func NewHTTPServer(c *conf.Server, auth *service.AuthService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
+		http.ErrorEncoder(encoder.ErrorResponse),
+		http.ResponseEncoder(encoder.OKResponse),
 		http.Middleware(
 			recovery.Recovery(),
+			validate.Validator(),
 			selector.Server(
 				jwt.Server(func(token *jwtV5.Token) (interface{}, error) {
 					return []byte("test_jwt"), nil

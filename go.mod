@@ -8,6 +8,7 @@ require (
 	entgo.io/ent v0.14.0
 	github.com/casbin/casbin/v2 v2.98.0
 	github.com/casbin/ent-adapter v0.4.0
+	github.com/envoyproxy/protoc-gen-validate v1.0.4
 	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20240725023016-d6fca5e3e984
 	github.com/go-kratos/kratos/v2 v2.8.0
 	github.com/golang-jwt/jwt/v5 v5.1.0
